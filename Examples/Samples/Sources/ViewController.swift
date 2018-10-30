@@ -18,6 +18,7 @@ class SampleListViewController: UIViewController, UITableViewDataSource, UITable
         case showDetail
         case showModal
         case showTabBar
+        case showNestedScrollView
 
         var name: String {
             switch self {
@@ -26,6 +27,7 @@ class SampleListViewController: UIViewController, UITableViewDataSource, UITable
             case .showDetail: return "Show Detail Panel"
             case .showModal: return "Show Modal"
             case .showTabBar: return "Show Tab Bar"
+            case .showNestedScrollView: return "Show Nested ScrollView"
             }
         }
 
@@ -36,6 +38,7 @@ class SampleListViewController: UIViewController, UITableViewDataSource, UITable
             case .showDetail: return "DetailViewController"
             case .showModal: return "ModalViewController"
             case .showTabBar: return "TabBarViewController"
+            case .showNestedScrollView: return "NestedScrollViewController"
             }
         }
     }
@@ -70,9 +73,10 @@ class SampleListViewController: UIViewController, UITableViewDataSource, UITable
 
         case let contentVC as DebugTableViewController:
             mainPanelVC.track(scrollView: contentVC.tableView)
-
+        case let contentVC as NestedScrollViewController:
+            mainPanelVC.track(scrollView: contentVC.scrollView)
         default:
-            fatalError()
+            break
         }
         //  Add FloatingPanel to self.view
         mainPanelVC.addPanel(toParent: self, belowView: nil, animated: true)
@@ -135,12 +139,27 @@ class SampleListViewController: UIViewController, UITableViewDataSource, UITable
     }
 }
 
+class NestedScrollViewController: UIViewController {
+    @IBOutlet weak var scrollView: UIScrollView!
+
+    @IBAction func longPressed(_ sender: Any) {
+        print("LongPressed!")
+    }
+    @IBAction func swipped(_ sender: Any) {
+        print("Swipped!")
+    }
+    @IBAction func tapped(_ sender: Any) {
+        print("Tapped!")
+    }
+}
+
 class DebugTextViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var textView: UITextView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
+
         if #available(iOS 11.0, *) {
             textView.contentInsetAdjustmentBehavior = .never
         }
@@ -241,6 +260,15 @@ class DetailViewController: UIViewController {
         // dismiss(animated: true, completion: nil)
         (self.parent as? FloatingPanelController)?.removePanelFromParent(animated: true, completion: nil)
     }
+    @IBAction func tapped(_ sender: Any) {
+        print("Detail panel is tapped!")
+    }
+    @IBAction func swipped(_ sender: Any) {
+        print("Detail panel is swipped!")
+    }
+    @IBAction func longPressed(_ sender: Any) {
+        print("Detail panel is longPressed!")
+    }
 }
 
 class ModalViewController: UIViewController {
@@ -274,6 +302,16 @@ class ModalViewController: UIViewController {
 
     @IBAction func close(sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+
+    @IBAction func moveToFull(sender: UIButton) {
+        fpc.move(to: .full, animated: true)
+    }
+    @IBAction func moveToHalf(sender: UIButton) {
+        fpc.move(to: .half, animated: true)
+    }
+    @IBAction func moveToTip(sender: UIButton) {
+        fpc.move(to: .tip, animated: true)
     }
 }
 
@@ -345,7 +383,7 @@ class OneTabBarPanelLayout: FloatingPanelLayout {
     var initialPosition: FloatingPanelPosition {
         return .tip
     }
-    var supportedPositions: [FloatingPanelPosition] {
+    var supportedPositions: Set<FloatingPanelPosition> {
         return [.full, .tip]
     }
 
@@ -362,7 +400,7 @@ class TwoTabBarPanel2Layout: FloatingPanelLayout {
     var initialPosition: FloatingPanelPosition {
         return .half
     }
-    var supportedPositions: [FloatingPanelPosition] {
+    var supportedPositions: Set<FloatingPanelPosition> {
         return [.full, .half]
     }
     var bottomInteractionBuffer: CGFloat {

@@ -30,7 +30,7 @@ The new interface displays the related contents and utilities in parallel as a u
   - [Customize the behavior with `FloatingPanelBehavior` protocol](#customize-the-behavior-with-floatingpanelbehavior-protocol)
     - [Modify your floating panel's interaction](#modify-your-floating-panels-interaction)
   - [Create an additional floating panel for a detail](#create-an-additional-floating-panel-for-a-detail)
-  - [Move a positon with an animation](#move-a-positon-with-an-animation)
+  - [Move a position with an animation](#move-a-position-with-an-animation)
   - [Make your contents correspond with a floating panel behavior](#make-your-contents-correspond-with-a-floating-panel-behavior)
 - [Notes](#notes)
   - [FloatingPanelSurfaceView's issue on iOS 10](#floatingpanelsurfaceviews-issue-on-ios-10)
@@ -120,7 +120,7 @@ class ViewController: UIViewController, FloatingPanelControllerDelegate {
 
 ### Customize the layout of a floating panel with  `FloatingPanelLayout` protocol
 
-#### Change the initial position, supported positions and height
+#### Change the initial position and height
 
 ```swift
 class ViewController: UIViewController, FloatingPanelControllerDelegate {
@@ -135,23 +135,13 @@ class MyFloatingPanelLayout: FloatingPanelLayout {
     public var initialPosition: FloatingPanelPosition {
         return .tip
     }
-    public var supportedPositions: [FloatingPanelPosition] {
-        return [.full, .half, .tip]
-    }
 
     public func insetFor(position: FloatingPanelPosition) -> CGFloat? {
         switch position {
-            case .full: return 16.0 # A top inset from safe area
-            case .half: return 216.0 # A bottom inset from the safe area
-            case .tip: return 44.0 # A bottom inset from the safe area
+            case .full: return 16.0 // A top inset from safe area
+            case .half: return 216.0 // A bottom inset from the safe area
+            case .tip: return 44.0 // A bottom inset from the safe area
         }
-    }
-
-    func prepareLayout(surfaceView: UIView, in view: UIView) -> [NSLayoutConstraint] {
-        return [
-            surfaceView.leftAnchor.constraint(equalTo: view.sideLayoutGuide.leftAnchor, constant: 0.0),
-            surfaceView.rightAnchor.constraint(equalTo: view.sideLayoutGuide.rightAnchor, constant: 0.0),
-        ]
     }
 }
 ```
@@ -162,7 +152,7 @@ class MyFloatingPanelLayout: FloatingPanelLayout {
 class ViewController: UIViewController, FloatingPanelControllerDelegate {
     ...
     func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout? {
-        return (newCollection.verticalSizeClass == .compact) ? FloatingPanelLandscapeLayout() : nil // Returing nil indicates to use the default layout
+        return (newCollection.verticalSizeClass == .compact) ? FloatingPanelLandscapeLayout() : nil // Returning nil indicates to use the default layout
     }
     ...
 }
@@ -171,7 +161,7 @@ class FloatingPanelLandscapeLayout: FloatingPanelLayout {
     public var initialPosition: FloatingPanelPosition {
         return .tip
     }
-    public var supportedPositions: [FloatingPanelPosition] {
+    public var supportedPositions: Set<FloatingPanelPosition> {
         return [.full, .tip]
     }
 
@@ -250,9 +240,9 @@ class ViewController: UIViewController, FloatingPanelControllerDelegate {
 }
 ```
 
-### Move a positon with an animation
+### Move a position with an animation
 
-In the following example, I move a floating panel to full or half position while opening or closeing a search bar like Apple Maps.
+In the following example, I move a floating panel to full or half position while opening or closing a search bar like Apple Maps.
 
 ```swift
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -302,7 +292,7 @@ override func viewDidLayoutSubviews() {
     }
 }
 ```
-* If you sets clear color to `FloatingPanelSurfaceView.backgrounColor`, please note the bottom overflow of your content on bouncing at full position. To prevent it, you need to expand your content. For example, See Example/Maps's Auto Layout settings of UIVisualEffectView in Main.storyborad.
+* If you sets clear color to `FloatingPanelSurfaceView.backgroundColor`, please note the bottom overflow of your content on bouncing at full position. To prevent it, you need to expand your content. For example, See Example/Maps's Auto Layout settings of UIVisualEffectView in Main.storyborad.
 
 ## Author
 
