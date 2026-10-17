@@ -17,17 +17,23 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
+IDEWorkspaceChecks.plis
+*.xcodeproj/project.xcworkspace
 
 ## Other
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+*.xcsettings
 
 ## Obj-C/Swift specific
 *.hmap
 *.ipa
 *.dSYM.zip
 *.dSYM
+
+## Swift Package Manager Specific
+.swiftpm/
 
 ## Playgrounds
 timeline.xctimeline

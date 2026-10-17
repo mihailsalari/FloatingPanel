@@ -4,13 +4,9 @@
    <FileRef
       location = "group:README.md">
    </FileRef>
-   <Group
-      location = "group:Framework"
-      name = "Framework">
-      <FileRef
-         location = "group:FloatingPanel.xcodeproj">
-      </FileRef>
-   </Group>
+   <FileRef
+      location = "group:FloatingPanel.xcodeproj">
+   </FileRef>
    <Group
       location = "group:Examples"
       name = "Examples">
@@ -18,10 +14,19 @@
          location = "group:Maps/Maps.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:Maps-SwiftUI/Maps-SwiftUI.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:Stocks/Stocks.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:Samples/Samples.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:SamplesObjC/SamplesObjC.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:SamplesSwiftUI/SamplesSwiftUI.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>
